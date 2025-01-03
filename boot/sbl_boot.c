@@ -302,11 +302,9 @@ int sbl_boot_main(void)
 #endif
 #endif /* SINGLE_IMAGE*/
 	if (rc != 0) {
-        while (1)
-        {
-            BOOT_LOG_ERR("Unable to find bootable image");
-            SDK_DelayAtLeastUs(3000000, BOARD_BOOTCLOCKRUN_CORE_CLOCK);
-        }
+        BOOT_LOG_ERR("Unable to find bootable image");
+        SDK_DelayAtLeastUs(3000000, BOARD_BOOTCLOCKRUN_CORE_CLOCK);
+        NVIC_SystemReset();
     }
     
 	BOOT_LOG_INF("Bootloader chainload address offset: 0x%x",
