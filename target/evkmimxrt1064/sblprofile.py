@@ -15,7 +15,7 @@ if os.getenv('SBL_ROOT'):
 # EXEC_PATH is the compiler execute path, for example,  gcc, keil, IAR
 if  CROSS_TOOL == 'gcc':
     PLATFORM    = 'gcc'
-    EXEC_PATH   = r'/opt/share/toolchain/gcc-arm-none-eabi-9-2019-q4-major/bin'
+    EXEC_PATH   = r'/usr/bin'
 
 if os.getenv('SBL_EXEC_PATH'):
     EXEC_PATH = os.getenv('SBL_EXEC_PATH')
@@ -49,9 +49,9 @@ if PLATFORM == 'gcc':
     if BUILD == 'debug':
         CFLAGS += ' -gdwarf-2'
         AFLAGS += ' -gdwarf-2'
-        CFLAGS += ' -O0'
+        CFLAGS += ' -O0 -g'
     else:
-        CFLAGS += ' -O2 -Os'
+        CFLAGS += ' -O2 -Os -g'
 
     POST_ACTION = OBJCPY + ' -O binary $TARGET build/sbl.bin\n' + SIZE + ' $TARGET \n'
     POST_ACTION += MV + ' $TARGET build/$TARGET\n'
