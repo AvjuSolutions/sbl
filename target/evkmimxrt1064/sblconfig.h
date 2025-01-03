@@ -16,7 +16,6 @@
 #define ARCH_ARM_CORTEX_FPU
 #define SOC_IMXRTYYYY_SERIES
 #define SOC_REMAP_ENABLE
-#define COMPONENT_MCU_ISP
 
 /* MCU SBL core */
 
@@ -43,10 +42,6 @@
 
 /* secure */
 
-#define COMPONENT_MCUBOOT_SECURE
-#define CONFIG_BOOT_SIGNATURE
-#define CONFIG_BOOT_SIGNATURE_TYPE_RSA
-#define CONFIG_BOOT_SIGNATURE_TYPE_RSA_LEN 2048
 #define COMPONENT_MBEDTLS
 #define SBL_MBEDTLS_CONFIG_FILE "ksdk_mbedtls_config.h"
 
@@ -57,8 +52,6 @@
 #define SERIAL_PORT_TYPE_UART 1
 
 /* mcu isp support */
-
-#define ISP_TIMEOUT 5
 
 /* Platform Drivers Config */
 

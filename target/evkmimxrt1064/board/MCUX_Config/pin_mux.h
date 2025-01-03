@@ -45,11 +45,11 @@ extern "C" {
 void BOARD_InitBootPins(void);
 
 /* GPIO_AD_B0_13 (coord L14), UART1_RXD */
-#define BOARD_INITPINS_UART1_RXD_PERIPHERAL                              LPUART1   /*!< Device name: LPUART1 */
+#define BOARD_INITPINS_UART1_RXD_PERIPHERAL                              LPUART7   /*!< Device name: LPUART1 */
 #define BOARD_INITPINS_UART1_RXD_SIGNAL                                       RX   /*!< LPUART1 signal: RX */
 
 /* GPIO_AD_B0_12 (coord K14), UART1_TXD */
-#define BOARD_INITPINS_UART1_TXD_PERIPHERAL                              LPUART1   /*!< Device name: LPUART1 */
+#define BOARD_INITPINS_UART1_TXD_PERIPHERAL                              LPUART7   /*!< Device name: LPUART1 */
 #define BOARD_INITPINS_UART1_TXD_SIGNAL                                       TX   /*!< LPUART1 signal: TX */
 
 /* GPIO_AD_B0_10 (coord G13), JTAG_TDO/J21[13]/INT1_COMBO/ENET_INT/J22[6]/U32[11] */
