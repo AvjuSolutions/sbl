@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2021 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -36,6 +36,9 @@
 #define BOOTLOADER_VERSION     STR(MAJOR_VERSION) VERSION_SPACER STR(MINOR_VERSION) VERSION_SPACER STR(REVISE_VERSION)
 
 #define IMAGE_TRAILER_SIZE     sizeof(struct image_trailer)
+
+#define SNVS_LPSR_REGISTER_ADDRESS                  (*(volatile uint32_t *) 0x400D404C)
+#define SNVS_LPSR_LPTA_MASK                         (0x1U)
 
 //#define TEST_FUNCTION 1
 
@@ -288,7 +291,7 @@ int sbl_boot_main(void)
 
 #ifdef TEST_FUNCTION
     enable_image(Permanent_mode);
-#endif	
+#endif
 	BOOT_LOG_INF("Bootloader Version %s", BOOTLOADER_VERSION);
 	os_heap_init();
 
@@ -306,11 +309,19 @@ int sbl_boot_main(void)
         SDK_DelayAtLeastUs(3000000, BOARD_BOOTCLOCKRUN_CORE_CLOCK);
         NVIC_SystemReset();
     }
-    
+
 	BOOT_LOG_INF("Bootloader chainload address offset: 0x%x",
                  rsp.br_image_off);
 	BOOT_LOG_INF("Reset_Handler address offset: 0x%x",
                  rsp.br_image_off + rsp.br_hdr->ih_hdr_size);
+    BOOT_LOG_INF("LP Status register: 0x%x", SNVS_LPSR_REGISTER_ADDRESS);
+    if(SNVS_LPSR_REGISTER_ADDRESS & SNVS_LPSR_LPTA_MASK)
+    {
+        BOOT_LOG_INF("LP Status register: 0x%x", SNVS_LPSR_REGISTER_ADDRESS);
+        // LPSR_LPTA is w1c (write-1-to-clear)
+        SNVS_LPSR_REGISTER_ADDRESS |= SNVS_LPSR_LPTA_MASK;
+        NVIC_SystemReset();
+    }
 	BOOT_LOG_INF("Jumping to the image\r\n\r\n");
 	do_boot(&rsp);
 
@@ -340,15 +351,15 @@ void enable_image(image2_mode_t mode)
 
     memset((void *)&image_trailer2, 0xff, IMAGE_TRAILER_SIZE);
     memcpy((void *)image_trailer2.magic, boot_img_magic, sizeof(boot_img_magic));
-    
+
     if(mode == Permanent_mode)
     {
         image_trailer2.image_ok= BOOT_FLAG_SET;
     }
     off = FLASH_AREA_IMAGE_2_OFFSET + FLASH_AREA_IMAGE_2_SIZE - IMAGE_TRAILER_SIZE;
-    
+
     erase_off = FLASH_AREA_IMAGE_2_OFFSET + FLASH_AREA_IMAGE_2_SIZE - FLASH_AREA_IMAGE_SECTOR_SIZE;
-    
+
     sbl_flash_erase(erase_off, FLASH_AREA_IMAGE_SECTOR_SIZE);
 
     PRINTF("Write OK flag: off = 0x%x\r\n", off);
