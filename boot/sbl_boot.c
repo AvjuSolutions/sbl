@@ -317,9 +317,11 @@ int sbl_boot_main(void)
     BOOT_LOG_INF("LP Status register: 0x%x", SNVS_LPSR_REGISTER_ADDRESS);
     if(SNVS_LPSR_REGISTER_ADDRESS & SNVS_LPSR_LPTA_MASK)
     {
-        BOOT_LOG_INF("LP Status register: 0x%x", SNVS_LPSR_REGISTER_ADDRESS);
+        BOOT_LOG_INF("The device woke from hibernation with a TA event")
         // LPSR_LPTA is w1c (write-1-to-clear)
         SNVS_LPSR_REGISTER_ADDRESS |= SNVS_LPSR_LPTA_MASK;
+        BOOT_LOG_INF("LP Status register after clearing: 0x%x", SNVS_LPSR_REGISTER_ADDRESS);
+        BOOT_LOG_INF("Performing NVIC system reset to bring system into clean state")
         NVIC_SystemReset();
     }
 	BOOT_LOG_INF("Jumping to the image\r\n\r\n");
